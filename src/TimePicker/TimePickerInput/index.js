@@ -1,6 +1,6 @@
    import React, {useEffect} from 'react';
 import { ThemeProvider } from 'styled-components';
-// import useTheme
+import useTheme from "../../hooks/useTheme";
 import {
     StyledTimeInputWrapper,
     StyledTimePickerInput
@@ -12,6 +12,8 @@ import {
     validateInput,
     validateFirstNumber
 } from "../TimePickerFunctions/functions";
+import testIDs from '../__test__/testIDs';
+
 
 const TimePickerInput = ({
     className,
@@ -21,6 +23,7 @@ const TimePickerInput = ({
     inputRef,
     nextRef,
     prevRef,
+    onChange,
     testId,
 }) => {
     const theme = useTheme();
@@ -51,12 +54,12 @@ const TimePickerInput = ({
 
     const nextFocus = (ref) => {
         if (ref) {
-            onChange(setTimeWithZero(intRef.current.value));
+            onChange(setTimeWithZero(inputRef.current.value));
             ref.current.select();
         };
     };
 
-    const handleChnge = event => {
+    const handleChange = event => {
         const input = event.target.value;
         if(validateInput(input, limit)) {
             if(validateFirstNumber(input, limit)) {
@@ -65,16 +68,18 @@ const TimePickerInput = ({
                 return;
             };
             onChange(input);
-            if(input.length ===2) {
+            if(input.length === 2) {
                 nextFocus(nextRef);
             }
         };
     };
 
     const handleClick = (step = 0) => {
+        
         if (disabled) {
             return;
         };
+        
         const newTime = value ? parseInt(value) + step : 0;
         const isLimit = checkLimit(newTime, limit);
         if (isLimit) {
@@ -94,22 +99,22 @@ const TimePickerInput = ({
                 <FaCaretUp
                     className={"time-input__arrow time-input__arrow-up"}
                     onClick={() => handleClick(1)}
-                    dta-testId={testId + testIds.TimeInputArrowUp}
+                    data-testid={testId + testIDs.TimeInputArrowUp}
                 />
                 <StyledTimePickerInput
                     value={value}
                     className={className}
-                    onChange={(e) => handleChnge(e)}
-                    onBlue={setTimeWithZero}
+                    onChange={(e) => handleChange(e)}
+                    onBlur={setTimeWithZero}
                     ref={inputRef}
-                    onKeyp={onKeyPress}
+                    onKeyUp={onKeyPress}
                     disabled={disabled}
-                    data-testId={testId}
+                    data-testid={testId}
                 />
                 <FaCaretUp
                     className={"time-input__arrow time-input__arrow-down"}
                     onClick={() => handleClick(-1)}
-                    dta-testId={testId + testIds.TimeInputArrowDown}
+                    data-testid={testId + testIDs.TimeInputArrowDown}
                 />
             </StyledTimeInputWrapper>
         </ThemeProvider>

@@ -3,7 +3,7 @@ export default {
     TimeInputSeconds: "timeinput-seconds",
     TimeInputMinutes: "timeinput-minutes",
     TimeInputHours: "timeinput-hours",
-    TimeInputArrowUp: "-arrowup",
-    TimeInputArrowDown: "-arrowdown",
+    TimeInputArrowUp: "__arrowup",
+    TimeInputArrowDown: "__arrowdown",
     TimePickerResetButton: "timepicker-reset-button"
 }

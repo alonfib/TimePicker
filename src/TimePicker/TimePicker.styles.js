@@ -1,33 +1,33 @@
 import styled from "styled-components"
 import { darken } from 'polished'
 
-export const TimePickerWraper = styled.div`
+export const TimePickerWrapper = styled.div`
     display: grid;
     text-align: center;
+    font-size: ${(props) => props.theme.typography.defaultFontSize};
     width: min-content;
     grid-template-columns: max-content;
     align-items: center;
-    font-size: ${props => props.theme.typography.defaultFontSize};
     grid-template-areas:
     "timepicker label"
     "error blank";
 
-    &[data-isVertical="true"]{
+    &[data-isvertical="true"]{
         grid-template-areas: 
         "label"
         "timepicker"
         "error";
+
+        .time-picker-grid-wrapper__label {
+            padding-left: 0;
+        }
     };
 
-    .time-picker-grid-wrapper__label {
-        padding-left: 0;
-    }
 
     .time-picker-grid-wrapper__label {
         grid-area: label;
-        font-size: 1em;
-        font-size: ${props => props.theme.typography.fontFamily};
-        font-size: 0.7em;
+        font-size: ${props => props.theme.typography.defaultFontSize};
+        padding-left: 15px;
     };
 `;
 
@@ -38,12 +38,11 @@ export const StyledTimePicker = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
-    grid-template-columns: ${props => {
+    grid-template-columns: ${(props) => 
         `${props.withSeconds && "minmax(0, 1fr) 6px"} minmax(0, 1fr) 6px minmax(0, 1fr) 20%`
-    }};
-    width: ${props => props.size.width};
-    height: ${props => props.size.height || "auto"};
-    font-family: ${props => props.size.fontSize};
+    };
+    width: ${props => props.width || "200px"};
+    height: ${props => props.height || "auto"};
     min-width: 63px;
 
     .time-picker__hours-input {
@@ -95,7 +94,7 @@ export const TimePickerIcon = styled.button`
     display: flex;
     height: 40%;
     justify-content: center;
-    align-content: center;
+    align-items: center;
     text-align: center;
     border: 1px solid ${props => props.theme.colors.primary};
     border-left: none;
@@ -133,15 +132,15 @@ export const TimeInputLabel = styled.label`
     }
 
     &[data-isdisabled="true"]{
-        color: ${props => props.theme.color.disabled.primary};
-        background-color: ${props => props.theme.color.disabled.secondary};
-        border-color: ${props => prpos.theme.colors.disabled.primary};
+        color: ${props => props.theme.colors.disabled.primary};
+        background-color: ${props => props.theme.colors.disabled.secondary};
+        border-color: ${props => props.theme.colors.disabled.primary};
     }
 `;
 
-export const ErrorMessage = styled.label`
+export const TimePickerErrorMessage = styled.label`
     font-size: ${props => props.theme.typography.fontFamily};
-    color: ${props.theme.color.error};
+    color: ${props => props.theme.colors.error};
     grid-area: error;
     font-size: 0.7em;
 `;

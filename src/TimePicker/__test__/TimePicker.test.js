@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, fireEvent, cleanup, queryByText} from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+import {render, fireEvent, cleanup} from "@testing-library/react";
+import '@testing-library/jest-dom/extend-expect';
 import testIDs from "./testIDs"
 import TimePicker from "../index";
 import { setTimeWithZero } from "../TimePickerFunctions/functions";
@@ -9,60 +9,60 @@ describe("TimePicker rendering", () => {
     it("should render without crashing", () => {
         const {queryByTestId} = render(<TimePicker hour={2}/>);
 
-        const TP = queryByTestId(testsIDs.TimePicker);
-        expect(TP).toBeInDocument();
+        const timePicker = queryByTestId(testIDs.TimePicker);
+        expect(timePicker).toBeInTheDocument();
     })
 
     it("should render without onChange func and not crashing", () => {
         const {queryByTestId} = render(<TimePicker hour={2}/>);
 
-        const TP = queryByTestId(testsIDs.TimeInputHours);
-        fireEvent.change(TP, {target: {value: "06"}});
+        const timePicker = queryByTestId(testIDs.TimeInputHours);
+        fireEvent.change(timePicker, {target: {value: "06"}});
 
-        expect(TP).toBeInDocument();
+        expect(timePicker).toBeInTheDocument();
     })
 
     it("should render without onChange func and change the calue", () => {
         const {queryByTestId} = render(<TimePicker hour={2}/>);
 
-        const TP = queryByTestId(testsIDs.TimeInputHours);
-        fireEvent.change(TP, {target: {value: "06"}});
+        const timePicker = queryByTestId(testIDs.TimeInputHours);
+        fireEvent.change(timePicker, {target: {value: "06"}});
         
-        expect(TP.value).toBe("06");
+        expect(timePicker.value).toBe("06");
     });
 
     it("should render with the correct label", () => {
         const {queryByText} = render(<TimePicker label={"test"}/>);
 
-        expect(queryByText("test")).toBeInDocument();
+        expect(queryByText("test")).toBeInTheDocument();
     })
 
     
     it("should render with the correct error label", () => {
         const {queryByText} = render(<TimePicker errorMessage={"test"} isError/>);
 
-        expect(queryByText("test")).toBeInDocument();
+        expect(queryByText("test")).toBeInTheDocument();
     })
 
     
     it("should render with the correct values", () => {
         const {queryByTestId} = render(<TimePicker hour={2} minute={15} second={5}/>);
 
-        const secondsInput = queryByTestId(testTDs.TimeInputSeconds);
-        const minutesInput = queryByTestId(testTDs.TimeInputMinutes);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
+        const secondsInput = queryByTestId(testIDs.TimeInputSeconds);
+        const minutesInput = queryByTestId(testIDs.TimeInputMinutes);
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
 
-        expect(secondsInput).toBe("05");
-        expect(minutesInput).toBe("15");
-        expect(hoursInput).toBe("02");
+        expect(secondsInput.value).toBe("05");
+        expect(minutesInput.value).toBe("15");
+        expect(hoursInput.value).toBe("02");
     });
 
     it("should render diabled", () => {
         const {queryByTestId} = render(<TimePicker hour={2} minute={15} second={5} isDisabled/>);
 
-        const secondsInput = queryByTestId(testTDs.TimeInputSeconds);
-        const minutesInput = queryByTestId(testTDs.TimeInputMinutes);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
+        const secondsInput = queryByTestId(testIDs.TimeInputSeconds);
+        const minutesInput = queryByTestId(testIDs.TimeInputMinutes);
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
 
         expect(secondsInput).toBeDisabled();
         expect(minutesInput).toBeDisabled();
@@ -70,108 +70,107 @@ describe("TimePicker rendering", () => {
     });
 
     it("should render without seconds", () => {
-        const {queryByTestId} = render(<TimePicker hour={2} minute={15} second={5}/>);
+        const {queryByTestId} = render(<TimePicker hour={2} minute={15} second={5} withSeconds={false}/>);
 
-        const secondsInput = queryByTestId(testTDs.TimeInputSeconds);
+        const secondsInput = queryByTestId(testIDs.TimeInputSeconds);
 
-        expect(secondsInput).not.toBeInDocument();
+        expect(secondsInput).not.toBeInTheDocument();
     });
 
     it("should render with the correct values after zero fixing", () => {
         const {queryByTestId} = render(<TimePicker hour={7} minute={3} second={5}/>);
 
-        const secondsInput = queryByTestId(testTDs.TimeInputSeconds);
-        const minutesInput = queryByTestId(testTDs.TimeInputMinutes);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
+        const secondsInput = queryByTestId(testIDs.TimeInputSeconds);
+        const minutesInput = queryByTestId(testIDs.TimeInputMinutes);
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
 
-        expect(secondsInput).toBe("05");
-        expect(minutesInput).toBe("03");
-        expect(hoursInput).toBe("07");
+        expect(secondsInput.value).toBe("05");
+        expect(minutesInput.value).toBe("03");
+        expect(hoursInput.value).toBe("07");
     });
 
     it("should call onChange func", () => {
         const jestFn = jest.fn();
 
         const {queryByTestId} = render(<TimePicker hour={3} minute={15} second={5}/>);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
 
         fireEvent.change(hoursInput, {target: {value: "02"}});
-        expect(hoursInput).toBe("02");
+        expect(hoursInput.value).toBe("02");
     });
 
     it("should render with validate inputs value (stay the same)", () => {
         const {queryByTestId} = render(<TimePicker hour={7} minute={3} second={5}/>);
 
-        const secondsInput = queryByTestId(testTDs.TimeInputSeconds);
-        const minutesInput = queryByTestId(testTDs.TimeInputMinutes);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
+        const secondsInput = queryByTestId(testIDs.TimeInputSeconds);
+        const minutesInput = queryByTestId(testIDs.TimeInputMinutes);
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
 
         fireEvent.change(secondsInput, {target: {value: "a"}});
         fireEvent.change(minutesInput, {target: {value: "b"}});
         fireEvent.change(hoursInput, {target: {value: "c"}});
 
 
-        expect(secondsInput).toBe("05");
-        expect(minutesInput).toBe("03");
-        expect(hoursInput).toBe("07");
+        expect(secondsInput.value).toBe("05");
+        expect(minutesInput.value).toBe("03");
+        expect(hoursInput.value).toBe("07");
     });
 
     it("should inc value by 1", () => {
         const {queryByTestId} = render(<TimePicker hour={3} minute={15} second={5}/>);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
-        const hoursInputArrowUp = queryByTestId(testTDs.TimeInputHours + testTDs.TimeInputArrowUp);
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
+        const hoursInputArrowUp = queryByTestId(testIDs.TimeInputHours + testIDs.TimeInputArrowUp);
         
         fireEvent.click(hoursInputArrowUp);
-        expect(hoursInput).toBe("04");
+        expect(hoursInput.value).toBe("04");
     });
 
     it("should dec value by 1", () => {
         const {queryByTestId} = render(<TimePicker hour={3} minute={15} second={5}/>);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
-        const hoursInputArrowDown = queryByTestId(testTDs.TimeInputHours + testTDs.TimeInputArrowDown);
-        
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
+        const hoursInputArrowDown = queryByTestId(testIDs.TimeInputHours + testIDs.TimeInputArrowDown);
         fireEvent.click(hoursInputArrowDown);
-        expect(hoursInput).toBe("02");
+        expect(hoursInput.value).toBe("02");
     });
 
     it("should change value to top limit", () => {
         const {queryByTestId} = render(<TimePicker hour={0} minute={0} second={0}/>);
 
-        const secondsInput = queryByTestId(testTDs.TimeInputSeconds);
-        const minutesInput = queryByTestId(testTDs.TimeInputMinutes);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
+        const secondsInput = queryByTestId(testIDs.TimeInputSeconds);
+        const minutesInput = queryByTestId(testIDs.TimeInputMinutes);
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
         
-        const secondsInputArrowDown = queryByTestId(testTDs.TimeInputSeconds + testTDs.TimeInputArrowDown);
-        const minutesInputArrowDown = queryByTestId(testTDs.TimeInputMinutes + testTDs.TimeInputArrowDown);
-        const hoursInputArrowDown = queryByTestId(testTDs.TimeInputHours + testTDs.TimeInputArrowDown);
+        const secondsInputArrowDown = queryByTestId(testIDs.TimeInputSeconds + testIDs.TimeInputArrowDown);
+        const minutesInputArrowDown = queryByTestId(testIDs.TimeInputMinutes + testIDs.TimeInputArrowDown);
+        const hoursInputArrowDown = queryByTestId(testIDs.TimeInputHours + testIDs.TimeInputArrowDown);
         
         fireEvent.click(secondsInputArrowDown);
         fireEvent.click(minutesInputArrowDown);
         fireEvent.click(hoursInputArrowDown);
 
-        expect(secondsInput).toBe("59");
-        expect(minutesInput).toBe("59");
-        expect(hoursInput).toBe("23");
+        expect(secondsInput.value).toBe("59");
+        expect(minutesInput.value).toBe("59");
+        expect(hoursInput.value).toBe("23");
     });
 
     it("should change value to bottom limit", () => {
         const {queryByTestId} = render(<TimePicker hour={23} minute={59} second={59}/>);
 
-        const secondsInput = queryByTestId(testTDs.TimeInputSeconds);
-        const minutesInput = queryByTestId(testTDs.TimeInputMinutes);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
+        const secondsInput = queryByTestId(testIDs.TimeInputSeconds);
+        const minutesInput = queryByTestId(testIDs.TimeInputMinutes);
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
         
-        const secondsInputArrowUp = queryByTestId(testTDs.TimeInputSeconds + testTDs.TimeInputArrowUp);
-        const minutesInputArrowUp = queryByTestId(testTDs.TimeInputMinutes + testTDs.TimeInputArrowUp);
-        const hoursInputArrowUp = queryByTestId(testTDs.TimeInputHours + testTDs.TimeInputArrowUp);
+        const secondsInputArrowUp = queryByTestId(testIDs.TimeInputSeconds + testIDs.TimeInputArrowUp);
+        const minutesInputArrowUp = queryByTestId(testIDs.TimeInputMinutes + testIDs.TimeInputArrowUp);
+        const hoursInputArrowUp = queryByTestId(testIDs.TimeInputHours + testIDs.TimeInputArrowUp);
         
         fireEvent.click(secondsInputArrowUp);
         fireEvent.click(minutesInputArrowUp);
         fireEvent.click(hoursInputArrowUp);
 
-        expect(secondsInput).toBe("00");
-        expect(minutesInput).toBe("00");
-        expect(hoursInput).toBe("00");
+        expect(secondsInput.value).toBe("00");
+        expect(minutesInput.value).toBe("00");
+        expect(hoursInput.value).toBe("00");
     });
 
     it("should reset time to current time", () => {
@@ -181,18 +180,18 @@ describe("TimePicker rendering", () => {
         const TimePickerResetButton = queryByTestId(testIDs.TimePickerResetButton)
         fireEvent.click(TimePickerResetButton);
 
-        const secondsInput = queryByTestId(testTDs.TimeInputSeconds);
-        const minutesInput = queryByTestId(testTDs.TimeInputMinutes);
-        const hoursInput = queryByTestId(testTDs.TimeInputHours);
+        const secondsInput = queryByTestId(testIDs.TimeInputSeconds);
+        const minutesInput = queryByTestId(testIDs.TimeInputMinutes);
+        const hoursInput = queryByTestId(testIDs.TimeInputHours);
 
         expect(secondsInput.value).toBe(
             setTimeWithZero(dateTime.getSeconds()).toString()
         );
-        expect(minutesInput).toBe(
+        expect(minutesInput.value).toBe(
             setTimeWithZero(dateTime.getMinutes()).toString()
             
         );
-        expect(hoursInput).toBe(
+        expect(hoursInput.value).toBe(
             setTimeWithZero(dateTime.getHours()).toString()
         );
     })

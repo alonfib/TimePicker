@@ -20,7 +20,7 @@ describe("TimePickerInput functions", () => {
         const limit = 24;
         expect(() => checkLimit(null, null)).toThrowError(Error);
         expect(() => checkLimit(undefined, undefined)).toThrowError(Error);
-        expect(checkLimit(24, limit)).toBe("0");
+        expect(checkLimit(24, limit)).toBe("00");
         expect(checkLimit(-1, limit)).toBe(limit - 1);
     })
 
@@ -43,9 +43,9 @@ describe("TimePickerInput functions", () => {
 
     it("getTim function, (validateInput && setTimeWityZero)", () => {
         const limit = 60;
-        expect(getTim("a",limit)).toBe(false);
-        expect(getTim(3,limit)).toBe("03");
-        expect(getTim(30,limit)).toBe("30");
+        expect(getTime("a",limit)).toBe(false);
+        expect(getTime(3,limit)).toBe("03");
+        expect(getTime(30,limit)).toBe("30");
     })
     
     afterEach(cleanup);     

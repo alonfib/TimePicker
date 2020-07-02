@@ -1,11 +1,18 @@
 import React, {useState, useRef, useEffect, Fragment} from 'react';
-import { ThemeProvider, useTheme } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import testIDs from "./__test__/testIDs";
 import PropTypes from 'prop-types';
 import { getTime, setTimeWithZero} from "./TimePickerFunctions/functions";
-
+import {
+    TimePickerWrapper,
+    StyledTimePicker,
+    TimeInputLabel,
+    TimePickerIcon,
+    TimePickerErrorMessage
+} from './TimePicker.styles.js'
+import TimePickerInput from "./TimePickerInput"
 import { FaSyncAlt } from 'react-icons/fa';
-import { isElement } from 'react-dom/test-utils';
+import useTheme from "../hooks/useTheme";
 
 const hoursLimit = 24;
 const minutesLimit = 60;
@@ -22,7 +29,7 @@ const TimePicker = ({
     isDisabled,
     isError,
     errorMessage,
-    isRequired,
+    isRequired = false,
     label,
     isVertical,
     seperationMark,
@@ -31,10 +38,11 @@ const TimePicker = ({
     second,
     withSeconds,
 }) => {
-    // const theme = useTheme();
-    const [hours, setHours] = useState(getTime(hour, setHours));
-    const [minutes, setMinutes] = useState(getTime(minute, setMinutes));
-    const [seconds, setSeconds] = useState(getTime(second, setSeconds));
+    const theme = useTheme();
+
+    const [hours, setHours] = useState(getTime(hour, hoursLimit));
+    const [minutes, setMinutes] = useState(getTime(minute, minutesLimit));
+    const [seconds, setSeconds] = useState(getTime(second, secondsLimit));
     const hoursRef = useRef(null);
     const minutesRef = useRef(null);
     const secondsRef = useRef(null);
@@ -59,11 +67,12 @@ const TimePicker = ({
         <ThemeProvider theme={theme}>
             <TimePickerWrapper
                 className={"time-picker-grid-wrapper"}
-                data-isVertical={isVertical}
+                data-isvertical={isVertical}
                 data-testid={testIDs.TimePicker}
             >
                 <label className="time-picker-grid-wrapper__label">
-                    {`${isRequired && '*'} ${label}`}
+                    {isRequired && '*'}
+                    {label}
                 </label>
                 <StyledTimePicker
                     className={`time-picker ${className}`}
@@ -113,7 +122,7 @@ const TimePicker = ({
                                 value={seconds}
                                 onChange={setSeconds}
                                 inputRef={secondsRef}
-                                limit={secondsRef}
+                                limit={secondsLimit }
                                 prevRef={minutesRef}
                                 disabled={isDisabled}
                                 testId={testIDs.TimeInputSeconds}
@@ -124,7 +133,7 @@ const TimePicker = ({
                         className={"time-picker__icon-wrapper"}
                         onClick={resetTime}
                         disabled={isDisabled}
-                        data-isDisabled={isDisabled}
+                        data-isdisabled={isDisabled}
                         data-testid={testIDs.TimePickerResetButton}
                     >
                         <FaSyncAlt className={"time-picker__icon"}/>
@@ -139,6 +148,17 @@ const TimePicker = ({
 let dateTime = new Date();
 
 TimePicker.propTypes = {
+    id: PropTypes.string,
+    name: PropTypes.string ,
+    className: PropTypes.string,
+    width: PropTypes.string,
+    height: PropTypes.string,
+    isDisabled: PropTypes.bool,
+    isError: PropTypes.bool,
+    errorMessage: PropTypes.string,
+    isRequired:PropTypes.bool,
+    label: PropTypes.string,
+    isVertical:PropTypes.bool,
     disabled: PropTypes.bool,
     onChange: PropTypes.func,
     seperationMark: PropTypes.string,
